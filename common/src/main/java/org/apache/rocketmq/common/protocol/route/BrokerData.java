@@ -25,8 +25,14 @@ import java.util.Map;
 import org.apache.rocketmq.common.MixAll;
 
 public class BrokerData implements Comparable<BrokerData> {
+    // Broker所属的集群
     private String cluster;
+    // Broker名称
     private String brokerName;
+    /**
+     * Broker ID以及其地址
+     * 同一个brokerName下可以有一个Master和多个Slave，所以brokerAddrs是一个集合
+     */
     private HashMap<Long/* brokerId */, String/* broker address */> brokerAddrs;
 
     public String selectBrokerAddr() {

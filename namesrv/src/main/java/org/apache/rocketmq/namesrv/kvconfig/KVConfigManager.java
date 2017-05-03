@@ -32,9 +32,15 @@ import org.slf4j.LoggerFactory;
 public class KVConfigManager {
     private static final Logger log = LoggerFactory.getLogger(LoggerName.NAMESRV_LOGGER_NAME);
 
+    // Name Server主要控制类
     private final NamesrvController namesrvController;
-
+    // 读写锁
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    /**
+     * 以命名空间为单位存储的配置文件，存数示例如下：
+     * {"configTable":{"ORDER_TOPIC_CONFIG":{"UnitTest":"test"}}}%
+     * 此处的Namespace为ORDER_TOPIC_CONFIG，暂时不知道Namespace具体的含义
+     */
     private final HashMap<String/* Namespace */, HashMap<String/* Key */, String/* Value */>> configTable =
         new HashMap<String, HashMap<String, String>>();
 
@@ -43,8 +49,10 @@ public class KVConfigManager {
     }
 
     public void load() {
+        // 获取kv文件内容
         String content = MixAll.file2String(this.namesrvController.getNamesrvConfig().getKvConfigPath());
         if (content != null) {
+            // 将文件内容转换成KVConfigSerializeWrapper类
             KVConfigSerializeWrapper kvConfigSerializeWrapper =
                 KVConfigSerializeWrapper.fromJson(content, KVConfigSerializeWrapper.class);
             if (null != kvConfigSerializeWrapper) {
@@ -165,6 +173,9 @@ public class KVConfigManager {
         return null;
     }
 
+    /**
+     * 周期性地打印KV配置信息
+     */
     public void printAllPeriodically() {
         try {
             this.lock.readLock().lockInterruptibly();

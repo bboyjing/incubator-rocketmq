@@ -24,13 +24,19 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * srvutil子工程中只有ServerUtil这一个类
+ * 该类的功能是处理命令行参数
+ */
 public class ServerUtil {
 
     public static Options buildCommandlineOptions(final Options options) {
+        // 添加-h/-help参数，非必须
         Option opt = new Option("h", "help", false, "Print help");
         opt.setRequired(false);
         options.addOption(opt);
 
+        // 添加-n/namesrvAddr参数，非必须
         opt =
             new Option("n", "namesrvAddr", true,
                 "Name server address list, eg: 192.168.0.1:9876;192.168.0.2:9876");
@@ -41,12 +47,15 @@ public class ServerUtil {
     }
 
     public static CommandLine parseCmdLine(final String appName, String[] args, Options options,
-        CommandLineParser parser) {
+                                           CommandLineParser parser) {
         HelpFormatter hf = new HelpFormatter();
         hf.setWidth(110);
         CommandLine commandLine = null;
         try {
+            // 通过传递的Parser构造CommandLine
             commandLine = parser.parse(options, args);
+
+            // 如果有-h参数，打印帮助信息
             if (commandLine.hasOption('h')) {
                 hf.printHelp(appName, options, true);
                 return null;
@@ -58,12 +67,22 @@ public class ServerUtil {
         return commandLine;
     }
 
+    /**
+     * 打印命令行帮助信息
+     * @param appName
+     * @param options
+     */
     public static void printCommandLineHelp(final String appName, final Options options) {
         HelpFormatter hf = new HelpFormatter();
         hf.setWidth(110);
         hf.printHelp(appName, options, true);
     }
 
+    /**
+     * 把参数转成java.util.Properties类
+     * @param commandLine
+     * @return
+     */
     public static Properties commandLine2Properties(final CommandLine commandLine) {
         Properties properties = new Properties();
         Option[] opts = commandLine.getOptions();
