@@ -59,9 +59,14 @@ public class TopicConfigManager extends ConfigManager {
             // MixAll.SELF_TEST_TOPIC
             String topic = MixAll.SELF_TEST_TOPIC;
             TopicConfig topicConfig = new TopicConfig(topic);
+            // 维护了一个存储默认Topic的Set
             this.systemTopicList.add(topic);
             topicConfig.setReadQueueNums(1);
             topicConfig.setWriteQueueNums(1);
+            /**
+             * 存储每个Topic的配置信息
+             * 数据结构为ConcurrentHashMap，存在线程竞争的情况
+             */
             this.topicConfigTable.put(topicConfig.getTopicName(), topicConfig);
         }
         {

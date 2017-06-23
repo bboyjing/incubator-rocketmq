@@ -22,32 +22,46 @@ import org.apache.rocketmq.store.ConsumeQueue;
 
 public class MessageStoreConfig {
     //The root directory in which the log data is kept
+    /**
+     * 消息相关存储根路径
+     * 默认在~/store目录下
+     */
     @ImportantField
     private String storePathRootDir = System.getProperty("user.home") + File.separator + "store";
 
     //The directory in which the commitlog is kept
+    /**
+     * commit log存储路径
+     * 默认在~/store/commitlog目录下
+     */
     @ImportantField
     private String storePathCommitLog = System.getProperty("user.home") + File.separator + "store"
         + File.separator + "commitlog";
 
     // CommitLog file size,default is 1G
+    // CommitLog每个文件大小，默认1G
     private int mapedFileSizeCommitLog = 1024 * 1024 * 1024;
+
     // ConsumeQueue file size,default is 30W
+    // ConsumeQueue每个文件大小，默认存储30W条消息
     private int mapedFileSizeConsumeQueue = 300000 * ConsumeQueue.CQ_STORE_UNIT_SIZE;
 
     // CommitLog flush interval
     // flush data to disk
+    // CommitLog刷盘时间间隔，默认500毫秒
     @ImportantField
     private int flushIntervalCommitLog = 500;
 
     // Only used if TransientStorePool enabled
     // flush data to FileChannel
+
     @ImportantField
     private int commitIntervalCommitLog = 200;
 
     private boolean useReentrantLockWhenPutMessage = false;
 
     // Whether schedule flush,default is real-time
+    // 是否是定时刷盘，默认是实时刷盘
     @ImportantField
     private boolean flushCommitLogTimed = false;
     // ConsumeQueue flush interval
@@ -94,6 +108,7 @@ public class MessageStoreConfig {
     private int maxTransferBytesOnMessageInDisk = 1024 * 64;
     @ImportantField
     private int maxTransferCountOnMessageInDisk = 8;
+    // 命中消息在内存的最大比例
     @ImportantField
     private int accessMessageInMemoryMaxRatio = 40;
     @ImportantField
@@ -110,6 +125,7 @@ public class MessageStoreConfig {
     @ImportantField
     private String haMasterAddress = null;
     private int haSlaveFallbehindMax = 1024 * 1024 * 256;
+    // Broker角色，默认为异步复制数据到Slave
     @ImportantField
     private BrokerRole brokerRole = BrokerRole.ASYNC_MASTER;
     @ImportantField

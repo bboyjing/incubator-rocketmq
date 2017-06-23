@@ -23,53 +23,81 @@ import org.apache.rocketmq.common.constant.PermName;
 import org.apache.rocketmq.remoting.common.RemotingUtil;
 
 public class BrokerConfig {
+    // RocketMQ安装路径
     private String rocketmqHome = System.getProperty(MixAll.ROCKETMQ_HOME_PROPERTY, System.getenv(MixAll.ROCKETMQ_HOME_ENV));
+    // Name Server地址，如果有多个，则以分号隔开
     @ImportantField
-    private String namesrvAddr = System.getProperty(MixAll.NAMESRV_ADDR_PROPERTY, System.getenv(MixAll.NAMESRV_ADDR_ENV));
+    private String namesrvAddr = System.getProperty(MixAll.NAMESRV_ADDR_PROPERTY,
+            System.getenv(MixAll.NAMESRV_ADDR_ENV));
+    // Broker启动的IP地址
     @ImportantField
     private String brokerIP1 = RemotingUtil.getLocalAddress();
+    // 如果当前Broker的角色是Slave，则该地址为对应的Master的地址
     private String brokerIP2 = RemotingUtil.getLocalAddress();
+    // Broker名称，默认hostname
     @ImportantField
     private String brokerName = localHostName();
+    // 集群名称，默认为DefaultCluster
     @ImportantField
     private String brokerClusterName = "DefaultCluster";
+    // Broker ID 0：Master、非0：Slave
     @ImportantField
     private long brokerId = MixAll.MASTER_ID;
+    /**
+     * Broker访问权限
+     * PERM_READ：读权限
+     * PERM_WRITE：写权限
+     * PERM_INHERIT：继承权限（该权限暂时不清楚作用）
+     */
     private int brokerPermission = PermName.PERM_READ | PermName.PERM_WRITE;
+    // 默认的Topic("TBW102")的队列数
     private int defaultTopicQueueNums = 8;
+    // 是否允许自动创建Topic
     @ImportantField
     private boolean autoCreateTopicEnable = true;
-
+    // 是否允许自动创建以集群名字命名的Topic功能
     private boolean clusterTopicEnable = true;
-
+    // 是否云溪自动创建以Broker名字命名的Topic功能
     private boolean brokerTopicEnable = true;
+    // 是否允许自动创建订阅组名
     @ImportantField
     private boolean autoCreateSubscriptionGroup = true;
     private String messageStorePlugIn = "";
-
+    // 发消息线程数
     private int sendMessageThreadPoolNums = 1; //16 + Runtime.getRuntime().availableProcessors() * 4;
+    // 拉消息处理线程数
     private int pullMessageThreadPoolNums = 16 + Runtime.getRuntime().availableProcessors() * 2;
+    // 管控命令处理线程数
     private int adminBrokerThreadPoolNums = 16;
+
     private int clientManageThreadPoolNums = 32;
     private int consumerManageThreadPoolNums = 32;
 
+    // flush消费端文件偏移时间戳，默认5秒
     private int flushConsumerOffsetInterval = 1000 * 5;
-
+    // flush消费端历史文件偏移时间戳，默认1分钟
     private int flushConsumerOffsetHistoryInterval = 1000 * 60;
 
+    // 是否拒绝接收事物消息
     @ImportantField
     private boolean rejectTransactionMessage = false;
+    // 是否从地址服务器寻找Name Server地址
     @ImportantField
     private boolean fetchNamesrvAddrByAddressServer = false;
+    // 发送消息对应的线程池阻塞队列Size
     private int sendThreadPoolQueueCapacity = 10000;
+    // 拉消息对应的线程池阻塞队列Size
     private int pullThreadPoolQueueCapacity = 100000;
     private int clientManagerThreadPoolQueueCapacity = 1000000;
     private int consumerManagerThreadPoolQueueCapacity = 1000000;
 
+    // 过滤服务器数量
     private int filterServerNums = 0;
 
+    // Consumer订阅消息时，Broker是否开启长轮训
     private boolean longPollingEnable = true;
 
+    // 如果是段轮询，服务器挂起时间
     private long shortPollingTimeMills = 1000;
 
     private boolean notifyConsumerIdsChangedEnable = true;

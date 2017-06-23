@@ -138,11 +138,21 @@ public class BrokerController {
         final NettyClientConfig nettyClientConfig, //
         final MessageStoreConfig messageStoreConfig //
     ) {
+        // 下面四个成员变量是BrokerStartup中讲到的配置类
         this.brokerConfig = brokerConfig;
         this.nettyServerConfig = nettyServerConfig;
         this.nettyClientConfig = nettyClientConfig;
         this.messageStoreConfig = messageStoreConfig;
+        /**
+         * 消费进度管理类
+         * 该构造函数很简单，只是设置给成员变量赋值
+         * 其中的方法等在有调用的时候再分析
+         */
         this.consumerOffsetManager = new ConsumerOffsetManager(this);
+        /**
+         * Topic配置管理类
+         * 该类初始化的时候创建了几个默认的Topic，详见TopicConfigManager构造函数
+         */
         this.topicConfigManager = new TopicConfigManager(this);
         this.pullMessageProcessor = new PullMessageProcessor(this);
         this.pullRequestHoldService = new PullRequestHoldService(this);
